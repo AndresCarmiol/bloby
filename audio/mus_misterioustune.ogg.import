@@ -12,8 +12,8 @@ dest_files=["res://.godot/imported/mus_misterioustune.ogg-0a1f554b0c731545553dc9
 
 [params]
 
-loop=false
-loop_offset=0
-bpm=0
+loop=true
+loop_offset=0.0
+bpm=0.0
 beat_count=0
 bar_beats=4

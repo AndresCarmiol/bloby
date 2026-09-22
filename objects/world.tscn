@@ -291,4 +291,3 @@ stream = ExtResource("7_00jqv")
 volume_db = -10.0
 pitch_scale = 0.8
 autoplay = true
-parameters/looping = true

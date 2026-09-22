@@ -15,7 +15,7 @@ config/description="A game about a slime called Bloby that eats corn and uses it
 config/version="0.0.3"
 run/main_scene="uid://boeetgbswi2b7"
 config/features=PackedStringArray("4.7", "Mobile")
-config/icon="res://icon.svg"
+config/icon="uid://cmi3sihr12kqy"
 
 [display]
 
