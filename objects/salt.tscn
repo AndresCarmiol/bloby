@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b40b4tctbeeou"]
+
+[ext_resource type="Script" uid="uid://b8lrchiy27hk5" path="res://scripts/salt.gd" id="1_2ap8b"]
+[ext_resource type="Texture2D" uid="uid://btanck2vq5lmn" path="res://graphics/salt.png" id="1_dsybd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ostoq"]
+size = Vector2(16, 3)
+
+[node name="salt" type="Area2D" unique_id=242946956]
+script = ExtResource("1_2ap8b")
+
+[node name="collision" type="CollisionShape2D" parent="." unique_id=967836475]
+position = Vector2(0, 6.5)
+shape = SubResource("RectangleShape2D_ostoq")
+
+[node name="sprite" type="Sprite2D" parent="." unique_id=1419199347]
+texture = ExtResource("1_dsybd")
+hframes = 2
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

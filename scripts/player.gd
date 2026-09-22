@@ -1,20 +1,33 @@
 extends CharacterBody2D
+class_name Player
 
+@onready var start_pos = position
+@onready var audioplayer = preload("res://objects/instant_sound.tscn")
+@onready var sound_splat_1 = preload("res://audio/splat_1.ogg")
+@onready var sound_splat_2 = preload("res://audio/splat_2.ogg")
+@onready var sound_splat_3 = preload("res://audio/splat_3.ogg")
+@onready var sound_splat_4 = preload("res://audio/splat_4.ogg")
+@onready var sound_splat_thic = preload("res://audio/splat_thic.ogg")
+@onready var sound_hurt_1 = preload("res://audio/bloby_hurt_1.ogg")
+@onready var sound_scream = preload("res://audio/bloby_scream.ogg")
 
 enum States {
 	GROUNDBOUND,
-	AIRBORNE
+	AIRBORNE,
+	HURT
 }
 
 const SPEED = 200.0
-const JUMP_VELOCITY = 300.0
-const GRAV = 500.0
+const JUMP_VELOCITY = 200.0
+const GRAV = 400.0
 const MAX_FALL_SPEED = 250.0
 
 var state: States = States.GROUNDBOUND
 var key_dir: Vector2i = Vector2i(0, 0)
 var direction: Vector2i = Vector2i(0, -1)
 var energy: Vector2 = Vector2(0.0, 0.0)
+var points = 0
+var won: bool = false
 
 
 func _physics_process(delta: float) -> void:
@@ -36,16 +49,27 @@ func _groundbound(_delta: float):
 		$sprite.play("airborne")
 		$sprite.offset.y = 0.0
 		state = States.AIRBORNE
+		var energy_number = (abs(energy.x) * abs(direction.y) + abs(energy.y) * abs(direction.x))
+		if energy_number == 0:
+			play_sound(audioplayer, sound_splat_3)
+		elif energy_number == 100:
+			play_sound(audioplayer, sound_splat_3)
+		elif energy_number == 200:
+			play_sound(audioplayer, sound_splat_4)
+		elif energy_number == 300:
+			play_sound(audioplayer, sound_splat_thic)
+		return
+	if $sprite.animation == "hurt":
 		return
 	var key_press = (key_dir.x != 0 and direction.x == 0 or key_dir.y != 0 and direction.y == 0)
 	if key_press and $sprite.animation != "charge_1" and $sprite.animation != "charge_2" and $sprite.animation != "charge_3":
-		energy = Vector2(100 * -key_dir.x * abs(direction.y), 200 * -key_dir.y * abs(direction.x))
+		energy = Vector2(100 * -key_dir.x * abs(direction.y), 100 * -key_dir.y * abs(direction.x))
 		$sprite.play("charge_1")
 	elif key_press and $sprite.animation != "charge_2" and $sprite.animation != "charge_3" and !$sprite.is_playing():
-		energy = Vector2(200 * -key_dir.x * abs(direction.y), 300 * -key_dir.y * abs(direction.x))
+		energy = Vector2(200 * -key_dir.x * abs(direction.y), 200 * -key_dir.y * abs(direction.x))
 		$sprite.play("charge_2")
 	elif key_press and $sprite.animation != "charge_3" and !$sprite.is_playing():
-		energy = Vector2(300 * -key_dir.x * abs(direction.y), 400 * -key_dir.y * abs(direction.x))
+		energy = Vector2(300 * -key_dir.x * abs(direction.y), 300 * -key_dir.y * abs(direction.x))
 		$sprite.play("charge_3")
 	if key_dir.x == 0 or direction.y == 0:
 		energy.x = 0
@@ -65,6 +89,8 @@ func _start_physics_process(_delta: float) -> void:
 		int(Input.is_action_pressed("key_right")) - int(Input.is_action_pressed("key_left")),
 		int(Input.is_action_pressed("key_down")) - int(Input.is_action_pressed("key_up"))
 	)
+	$points.text = "Points: " + str(points)
+	$message.visible = won
 
 
 func _end_physics_process(delta: float) -> void:
@@ -87,12 +113,14 @@ func _basic_collision_response(coll_normal) -> void:
 		if state_is(States.AIRBORNE):
 			_set_state(States.GROUNDBOUND)
 			$sprite.play("land")
+			play_sound(audioplayer, sound_splat_1)
 	if coll_normal.y != 0:
 		direction = Vector2(0, coll_normal.y)
 		velocity.y = 0
 		if state_is(States.AIRBORNE):
 			_set_state(States.GROUNDBOUND)
 			$sprite.play("land")
+			play_sound(audioplayer, sound_splat_1)
 
 
 func state_is(check_state) -> bool:
@@ -108,6 +136,8 @@ func _animation() -> void:
 		$sprite.rotation = PI/2 * -direction.x
 		$sprite.flip_v = bool(direction.y + 1)
 		$sprite.offset.y = -2 + 4 * int($sprite.flip_v)
+		if $sprite.animation == "hurt":
+			return
 		if $sprite.animation == "land" and !$sprite.is_playing():
 			$sprite.play("idle")
 		var key_press = (key_dir.x != 0 and direction.x == 0 or key_dir.y != 0 and direction.y == 0)
@@ -116,3 +146,25 @@ func _animation() -> void:
 		elif (key_dir.x == 0 and direction.x == 0 or key_dir.y == 0 and direction.y == 0) and $sprite.animation != "land" and $sprite.animation != "idle":
 			if $sprite.animation == "charge_1" or $sprite.animation == "charge_2" or $sprite.animation == "charge_3":
 				$sprite.play("idle")
+
+
+func play_sound(player, sound):
+	var instance = player.instantiate()
+	get_tree().get_current_scene().add_child(instance)
+	instance.stream = sound
+	instance.pitch_scale = randf_range(0.8, 1.2)
+	instance.volume_db = -8
+	instance.play()
+
+
+func _loose():
+	position = start_pos
+	points -= 20
+	if points < 0:
+		points = 0
+	play_sound(audioplayer, sound_scream)
+	velocity = Vector2.ZERO
+	direction = Vector2(0, -1)
+	energy = Vector2.ZERO
+	$sprite.play("hurt")
+	_set_state(States.GROUNDBOUND)

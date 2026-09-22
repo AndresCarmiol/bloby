@@ -19,10 +19,14 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=240
-window/size/viewport_height=176
+window/size/viewport_width=304
+window/size/viewport_height=208
 window/size/mode=2
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
 [input]
 
@@ -66,3 +70,4 @@ key_down={
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
+environment/defaults/default_clear_color=Color(0.098799996, 0.17847332, 0.38, 1)

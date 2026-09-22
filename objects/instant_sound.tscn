@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://vmcecn5ch5sd"]
+
+[ext_resource type="AudioStream" uid="uid://c41bwoli37p0o" path="res://audio/bloby_3.ogg" id="1_451fw"]
+[ext_resource type="Script" uid="uid://b2ehjtwwl7o4c" path="res://scripts/instant_sound.gd" id="1_mqphi"]
+
+[node name="instant_sound" type="AudioStreamPlayer" unique_id=1219540767]
+stream = ExtResource("1_451fw")
+script = ExtResource("1_mqphi")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

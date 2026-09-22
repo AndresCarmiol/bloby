@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dgirkuhnku1a6"]
+
+[ext_resource type="Texture2D" uid="uid://dscta2auvebkn" path="res://graphics/magicalbubble.png" id="1_7u8fr"]
+[ext_resource type="Script" uid="uid://lk2ufvqjtiwx" path="res://scripts/bubble.gd" id="2_wsnjn"]
+
+[node name="bubble" type="Sprite2D" unique_id=188213667]
+z_as_relative = false
+texture = ExtResource("1_7u8fr")
+script = ExtResource("2_wsnjn")

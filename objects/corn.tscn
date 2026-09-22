@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://r4hbep8xywek"]
+
+[ext_resource type="Script" uid="uid://ckvy4xvhwmylj" path="res://scripts/corn.gd" id="1_rmsqt"]
+[ext_resource type="Texture2D" uid="uid://c07fmtqfcutjl" path="res://graphics/corn.png" id="2_7e6ll"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ostoq"]
+size = Vector2(12, 12)
+
+[node name="corn" type="Area2D" unique_id=1971694331]
+script = ExtResource("1_rmsqt")
+
+[node name="collision" type="CollisionShape2D" parent="." unique_id=529820172]
+shape = SubResource("RectangleShape2D_ostoq")
+
+[node name="sprite" type="Sprite2D" parent="." unique_id=1197617028]
+texture = ExtResource("2_7e6ll")
+hframes = 3
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

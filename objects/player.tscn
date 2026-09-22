@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://b4ohxd1hnyg2w"]
 
 [ext_resource type="Texture2D" uid="uid://dxu85c0mdukp2" path="res://graphics/bloby_sheet.png" id="1_eqqp1"]
-[ext_resource type="Script" uid="uid://dyn3mcnf8uhwk" path="res://objects/player.gd" id="1_ykyjo"]
+[ext_resource type="Script" uid="uid://dyn3mcnf8uhwk" path="res://scripts/player.gd" id="1_ykyjo"]
+[ext_resource type="FontFile" uid="uid://4e6k3hcvydte" path="res://other/SuezOne-Regular.ttf" id="3_uxov2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mqnmn"]
 atlas = ExtResource("1_eqqp1")
@@ -50,6 +51,10 @@ region = Rect2(192, 48, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_4vq5b"]
 atlas = ExtResource("1_eqqp1")
 region = Rect2(240, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhqug"]
+atlas = ExtResource("1_eqqp1")
+region = Rect2(0, 144, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ykyjo"]
 atlas = ExtResource("1_eqqp1")
@@ -139,6 +144,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_bhqug")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ykyjo")
 }, {
 "duration": 1.0,
@@ -172,6 +185,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rxwto"]
 size = Vector2(12, 12)
 
+[sub_resource type="LabelSettings" id="LabelSettings_ostoq"]
+font = ExtResource("3_uxov2")
+
 [node name="player" type="CharacterBody2D" unique_id=1602005136]
 script = ExtResource("1_ykyjo")
 
@@ -188,3 +204,22 @@ shape = SubResource("RectangleShape2D_rxwto")
 
 [node name="camera" type="Camera2D" parent="." unique_id=1960235752]
 position = Vector2(0, 2)
+
+[node name="points" type="Label" parent="." unique_id=1614089439]
+texture_filter = 1
+offset_left = -145.0
+offset_top = -102.0
+offset_right = -63.0
+offset_bottom = -79.0
+text = "Points: 0"
+label_settings = SubResource("LabelSettings_ostoq")
+
+[node name="message" type="Label" parent="." unique_id=733269984]
+visible = false
+texture_filter = 1
+offset_left = -145.0
+offset_top = -85.0
+offset_right = 13.0
+offset_bottom = -62.0
+text = "Restart to play again"
+label_settings = SubResource("LabelSettings_ostoq")
